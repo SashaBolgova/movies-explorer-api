@@ -24,7 +24,7 @@ const NotFoundError = require('./errors/not-found-err');
 const { ERROR_404_MESSAGE, CRASH_SERVER } = require('./utils/constants');
 
 // Слушаем 3000 порт
-const { PORT = 3001, LOCALHOST = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
+const { PORT = 3000, LOCALHOST = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 
 mongoose.connect(LOCALHOST, {
   useNewUrlParser: true,
