@@ -12,7 +12,6 @@ const {
   ERROR_400_MESSAGE_USER,
   ERROR_404_MESSAGE_USER,
   ERROR_409_MESSAGE_USER,
-  SUCCESS_MESSAGE_USER,
 } = require('../utils/constants');
 
 module.exports.getUserInfo = (req, res, next) => {
@@ -66,16 +65,6 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch(next);
-};
-
-module.exports.signOut = (req, res) => {
-  res.cookie('jwt', 'none', {
-    maxAge: 3000,
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-  });
-  res.send({ message: SUCCESS_MESSAGE_USER });
 };
 
 module.exports.updateUser = (req, res, next) => {
