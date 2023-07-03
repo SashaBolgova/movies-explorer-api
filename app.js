@@ -4,8 +4,8 @@ const { errors } = require('celebrate');
 
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const helmet = require('helmet');
+const cors = require('./utils/cors');
 
 const app = express();
 const { userRouter, movieRouter } = require('./routes/index');
@@ -30,25 +30,7 @@ mongoose.connect(LOCALHOST, {
   useNewUrlParser: true,
 });
 
-app.use(cors(
-  {
-    origin: ['http://localhost:3000',
-      'http://localhost:3001',
-      'https://localhost:3000',
-      'https://localhost:3001',
-      'https://sashadiploma.nomoredomains.rocks',
-      'http://sashadiploma.nomoredomains.rocks',
-      'https://api.sashadiploma.nomoredomains.rocks',
-      'http://api.sashadiploma.nomoredomains.rocks',
-      'https://www.api.sashadiploma.nomoredomains.rocks',
-      'http://www.api.sashadiploma.nomoredomains.rocks'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    preflightContinue: false,
-    optionSuccessStatus: 200,
-  },
-));
+app.use(cors);
 
 app.use(cookieParser());
 app.use(express.json());
