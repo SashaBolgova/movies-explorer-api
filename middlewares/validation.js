@@ -17,12 +17,6 @@ const validateSignIn = celebrate({
   }),
 });
 
-const validateUserInfo = celebrate({
-  params: Joi.object().keys({
-    userId: Joi.string().required().hex().length(24),
-  }),
-});
-
 const validateUserUpdate = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
