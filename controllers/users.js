@@ -66,7 +66,7 @@ module.exports.login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
         { expiresIn: '7d' },
       );
-      res.cookie('jwt', token, {
+      res.cookie('token', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: 'none',
@@ -78,7 +78,7 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.signOut = (req, res) => {
-  res.cookie('jwt', 'none', {
+  res.cookie('token', 'none', {
     maxAge: 3000,
     httpOnly: true,
     sameSite: 'none',
