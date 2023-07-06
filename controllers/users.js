@@ -72,10 +72,10 @@ module.exports.login = (req, res, next) => {
         sameSite: 'none',
         secure: true,
       });
-      res.send({ message: 'Авторизация прошла успешно' });
+      res.send(user);
     })
     .catch(next);
-}
+};
 
 module.exports.signOut = (req, res) => {
   res.cookie('jwt', 'none', {

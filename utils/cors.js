@@ -1,7 +1,7 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  'http://localhost:3000',
-  'http://localhost:3001',
+    'http://localhost:3000',
+    'http://localhost:3001',
     'https://localhost:3000',
     'https://localhost:3001',
     'https://sashadiploma.nomoredomains.rocks',
@@ -9,7 +9,7 @@ const allowedCors = [
     'https://api.sashadiploma.nomoredomains.rocks',
     'http://api.sashadiploma.nomoredomains.rocks',
     'https://www.api.sashadiploma.nomoredomains.rocks',
-    'http://www.api.sashadiploma.nomoredomains.rocks'
+    'http://www.api.sashadiploma.nomoredomains.rocks',
 ];
 
 module.exports = (req, res, next) => {
