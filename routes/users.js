@@ -6,10 +6,10 @@ const {
   getUserInfo, updateUser,
 } = require('../controllers/users');
 const {
-  validateUserInfo, validateUserUpdate,
+ validateUserUpdate,
 } = require('../middlewares/validation');
 
-userRouter.get('/me', validateUserInfo, getUserInfo);
+userRouter.get('/me', getUserInfo);
 
 userRouter.patch('/me', validateUserUpdate, updateUser);
 
