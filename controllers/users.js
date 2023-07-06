@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, NODE_ENV } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -61,10 +61,30 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-      res.send({ token });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
+        { expiresIn: '7d' },
+      );
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
+      res.send({ message: 'Авторизация прошла успешно' });
     })
     .catch(next);
+}
+
+module.exports.signOut = (req, res) => {
+  res.cookie('jwt', 'none', {
+    maxAge: 3000,
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  res.send({ message: 'Вы успешно вышли' });
 };
 
 module.exports.updateUser = (req, res, next) => {
