@@ -1,10 +1,10 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-    'http://localhost:3000',
-    'http://localhost:3001',
+  'http://localhost:3000',
+  'http://localhost:3001',
     'https://localhost:3000',
     'https://localhost:3001',
-    'https://sashadiploma.nomoredomains.rocks'
+    'https://sashadiploma.nomoredomains.rocks',
     'http://sashadiploma.nomoredomains.rocks',
     'https://api.sashadiploma.nomoredomains.rocks',
     'http://api.sashadiploma.nomoredomains.rocks',
