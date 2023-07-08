@@ -1,23 +1,27 @@
 require('dotenv').config();
 
-const { JWT_SECRET = 'some-secret-key' } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/unauthorized-err');
 const ERROR_401_MESSAGE = require('../utils/constants');
 
 const auth = (req, res, next) => {
-  try {
-    const { token } = req.cookies;
+  const { token } = req.cookies;
 
-    if (!token) {
-      throw new UnauthorizedError(ERROR_401_MESSAGE);
-    }
-    req.user = jwt.verify(token, JWT_SECRET);
-    next();
-  } catch (err) {
-    next(new UnauthorizedError(ERROR_401_MESSAGE));
+  if (!token) {
+    return next(new UnauthorizedError(ERROR_401_MESSAGE));
   }
+  let payload;
+
+  try {
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
+  } catch (err) {
+    return next(new UnauthorizedError(ERROR_401_MESSAGE));
+  }
+  req.user = payload;
+
+  return next();
 };
 
 module.exports = { auth };
