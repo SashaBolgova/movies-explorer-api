@@ -66,13 +66,14 @@ module.exports.login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
         { expiresIn: '7d' },
       );
-      res.cookie('token', token, {
+      res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: 'none',
         secure: true,
       });
       res.send(user);
+      res.send({ message: 'Авторизация прошла успешно' });
     })
     .catch(next);
 };
