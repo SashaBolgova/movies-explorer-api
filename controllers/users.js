@@ -72,7 +72,6 @@ module.exports.login = (req, res, next) => {
         sameSite: 'none',
         secure: true,
       });
-      res.send(user);
       res.send({ message: 'Авторизация прошла успешно' });
     })
     .catch(next);
