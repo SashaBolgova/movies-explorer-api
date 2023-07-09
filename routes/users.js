@@ -6,7 +6,7 @@ const {
   getUserInfo, updateUser,
 } = require('../controllers/users');
 const {
- validateUserUpdate,
+  validateUserUpdate,
 } = require('../middlewares/validation');
 
 userRouter.get('/me', getUserInfo);

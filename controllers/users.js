@@ -35,10 +35,10 @@ module.exports.getUserInfo = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, email,
+    name, email, password,
   } = req.body;
 
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(password, 10)
     .then((hash) => {
       User.create({
         name, email, password: hash,
