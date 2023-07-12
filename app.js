@@ -4,8 +4,8 @@ const { errors } = require('celebrate');
 
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const helmet = require('helmet');
-const cors = require('./utils/cors');
 
 const app = express();
 const { userRouter, movieRouter } = require('./routes/index');
@@ -22,18 +22,37 @@ const limiter = require('./middlewares/rateLimit');
 const errorHandler = require('./middlewares/errorHandler');
 const NotFoundError = require('./errors/not-found-err');
 const { ERROR_404_MESSAGE, CRASH_SERVER } = require('./utils/constants');
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Слушаем 3000 порт
-const { PORT = 3000, LOCALHOST = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
+const { PORT = 3001, LOCALHOST = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 
 mongoose.connect(LOCALHOST, {
   useNewUrlParser: true,
 });
 
-app.use(cors);
+app.use(cors(
+  {
+    origin: ['http://localhost:3000',
+      'http://localhost:3001',
+      'https://localhost:3000',
+      'https://localhost:3001',
+      'https://sashadiploma.nomoredomains.rocks',
+      'http://sashadiploma.nomoredomains.rocks',
+      'https://api.sashadiploma.nomoredomains.rocks',
+      'http://api.sashadiploma.nomoredomains.rocks',
+      'https://www.api.sashadiploma.nomoredomains.rocks',
+      'http://www.api.sashadiploma.nomoredomains.rocks'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    preflightContinue: false,
+    optionSuccessStatus: 200,
+  },
+));
 
-app.use(cookieParser());
-app.use(express.json());
 app.use(requestLogger);
 app.use(limiter);
 app.use(helmet());

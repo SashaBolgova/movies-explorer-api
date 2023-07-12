@@ -5,15 +5,21 @@ const urlRegExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\.[a-zA-Z0-9
 const validateSignup = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(2),
-    name: Joi.string().min(2).max(30),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30).required(),
   }),
 });
 
 const validateSignIn = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(2),
+    password: Joi.string().required().min(8),
+  }),
+});
+
+const validateUserInfo = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().required().hex().length(24),
   }),
 });
 
@@ -49,6 +55,7 @@ const validateMovieDelete = celebrate({
 module.exports = {
   validateSignup,
   validateSignIn,
+  validateUserInfo,
   validateUserUpdate,
   validateMovieCreate,
   validateMovieDelete,

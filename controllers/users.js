@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { JWT_SECRET, NODE_ENV } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -12,6 +12,7 @@ const {
   ERROR_400_MESSAGE_USER,
   ERROR_404_MESSAGE_USER,
   ERROR_409_MESSAGE_USER,
+  SUCCESS_MESSAGE_USER,
 } = require('../utils/constants');
 
 module.exports.getUserInfo = (req, res, next) => {
@@ -35,15 +36,23 @@ module.exports.getUserInfo = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, email, password,
+    name, email,
   } = req.body;
 
-  bcrypt.hash(password, 10)
+  bcrypt.hash(req.body.password, 10)
     .then((hash) => {
       User.create({
         name, email, password: hash,
       })
-        .then((user) => res.status(201).send(user))
+        .then((user) => {
+          const token = jwt.sign(
+            { _id: user._id },
+            NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
+            { expiresIn: '7d' },
+          );
+
+          res.status(201).send({ message: SUCCESS_MESSAGE_USER, token, email, name })
+        })
         .catch((err) => {
           if (err.name === 'ValidationError') {
             next(new BadRequestError(ERROR_400_MESSAGE_USER));
@@ -72,19 +81,19 @@ module.exports.login = (req, res, next) => {
         sameSite: 'none',
         secure: true,
       });
-      res.send({ message: 'Авторизация прошла успешно' });
+      res.send({ message: SUCCESS_MESSAGE_USER, token, email: user.email, name: user.name });
     })
     .catch(next);
 };
 
 module.exports.signOut = (req, res) => {
-  res.cookie('token', 'none', {
+  res.cookie('jwt', 'none', {
     maxAge: 3000,
     httpOnly: true,
     sameSite: 'none',
     secure: true,
   });
-  res.send({ message: 'Вы успешно вышли' });
+  res.send({ message: SUCCESS_MESSAGE_USER });
 };
 
 module.exports.updateUser = (req, res, next) => {
